@@ -1,0 +1,13 @@
+# Fichiers de configuration sensibles
+config/.env
+
+# Dossiers système
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

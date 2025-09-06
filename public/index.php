@@ -3,9 +3,6 @@ require '../app/core/Database.php';
 
 $page = $_GET['page'] ?? 'home';
 
-$db = new Database();
-echo "Connexion OK !";
-
 switch ($page) {
     case 'home':
         include '../app/views/home.php';
