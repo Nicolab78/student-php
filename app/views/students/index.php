@@ -19,7 +19,7 @@
 
     <main>
 
-    <p>ccc</p>
+    <p></p>
 
     <?php if (isset($_GET['message'])): ?>
             <div class="message">
