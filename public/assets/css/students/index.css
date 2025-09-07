@@ -1,3 +1,4 @@
+/* Style simple pour la page */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -42,3 +43,44 @@ footer {
     color: #666;
     border-top: 1px solid #ddd;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+table a:hover {
+    text-decoration: underline;
+}
+
+.message {
+    padding: 10px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    margin-bottom: 15px;
+}
+
