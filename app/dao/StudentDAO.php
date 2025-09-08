@@ -24,6 +24,7 @@ class StudentDAO {
             $student->setPrenom($row['prenom']);
             $student->setAge($row['age']);
             $student->setEmail($row['email']);
+            $student->setPromotionId($row['promotion_id']);
             $students[] = $student;
         }
         
@@ -61,18 +62,20 @@ class StudentDAO {
         ]);
     }
 
-    public function update(Student $student) {
-        $sql = "UPDATE students SET nom = ?, prenom = ?, age = ?, email = ? WHERE id = ?";
-        $stmt = $this->db->getPdo()->prepare($sql);
-        
-        return $stmt->execute([
-            $student->getNom(),
-            $student->getPrenom(),
-            $student->getAge(),
-            $student->getEmail(),
-            $student->getId()
-        ]);
-    }
+    // Dans StudentDAO.php
+public function update(Student $student) {
+    $sql = "UPDATE students SET nom = ?, prenom = ?, age = ?, email = ?, promotion_id = ? WHERE id = ?";
+    $stmt = $this->db->getPdo()->prepare($sql);
+    
+    return $stmt->execute([
+        $student->getNom(),
+        $student->getPrenom(),
+        $student->getAge(),
+        $student->getEmail(),
+        $student->getPromotionId(),
+        $student->getId()
+    ]);
+}
     
     public function delete($id) {
         $sql = "DELETE FROM students WHERE id = ?";

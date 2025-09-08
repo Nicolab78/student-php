@@ -6,12 +6,16 @@ class Student {
     private $prenom;
     private $age;
     private $email;
+
+    private $promotion_id;
     
-    public function __construct($nom = '', $prenom = '', $age = 0, $email = '') {
+    public function __construct($nom = '', $prenom = '', $age = 0, $email = '' , $promotion_id = null) {
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->age = $age;
         $this->email = $email;
+        $this->promotion_id = $promotion_id;
+
     }
     
     // Getters
@@ -55,7 +59,19 @@ class Student {
     public function setEmail($email) {
         $this->email = $email;
     }
+
+    public function getPromotionId() {
+    return $this->promotion_id;
+    }
+
+    public function setPromotionId($promotion_id) {
+    $this->promotion_id = $promotion_id;
+    }
     
+    public function getFullName() {
+    return $this->prenom . ' ' . $this->nom;
+}
+
     public function toArray() {
         return [
             'id' => $this->id,
