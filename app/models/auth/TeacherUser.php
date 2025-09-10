@@ -29,7 +29,8 @@ class TeacherUser extends BaseUser {
             'student-update',
             'student-delete',
             'promotions', 
-            'promotion-show'
+            'promotion-show',
+            'promotion-edit'
         ];
         return in_array($resource, $allowedResources);
     }

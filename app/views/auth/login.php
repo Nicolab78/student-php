@@ -8,7 +8,6 @@
 <body>
     <header>
         <h1>Connexion</h1>
-        <?php echo password_hash('12345', PASSWORD_DEFAULT); ?>
     </header>
     
     <main>

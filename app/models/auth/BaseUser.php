@@ -6,6 +6,8 @@ abstract class BaseUser {
     protected $email;
     protected $password_hash;
     protected $created_at;
+
+    protected ?int $promotionId = null;
     
     public function __construct($username = '', $email = '', $password_hash = '') {
         $this->username = $username;
@@ -24,6 +26,14 @@ abstract class BaseUser {
     
     public function getPasswordHash() { return $this->password_hash; }
     public function setPasswordHash($hash) { $this->password_hash = $hash; }
+
+    public function getPromotionId(): ?int {
+    return $this->promotionId;
+    }
+
+    public function setPromotionId(?int $promotionId): void {
+    $this->promotionId = $promotionId;
+    }
     
     abstract public function getRole();
     abstract public function getPermissions();

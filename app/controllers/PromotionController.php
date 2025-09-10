@@ -2,6 +2,7 @@
 
 require_once '../app/models/Promotion.php';
 require_once '../app/dao/PromotionDAO.php';
+require_once '../app/services/AuthManager.php';
 
 class PromotionController {
     
@@ -12,6 +13,7 @@ class PromotionController {
     }
 
     public function index() {
+        // Tous peuvent voir la liste
         try {
             $promotions = $this->promotionDAO->findAll();
             include '../app/views/promotions/index.php';
@@ -22,10 +24,13 @@ class PromotionController {
     }
 
     public function create() {
+        // Seul l'admin peut créer des promotions
+        AuthManager::requireRole('admin');
         include '../app/views/promotions/create.php';
     }
 
     public function store() {
+        AuthManager::requireRole('admin');
         try {
             $nom = $_POST['nom'] ?? '';
             $annee = $_POST['annee'] ?? 0;
@@ -37,7 +42,6 @@ class PromotionController {
             
             $promotion = new Promotion($nom, $annee, $description);
             
-            // Sauvegarder
             if ($this->promotionDAO->create($promotion)) {
                 $message = "Promotion créée avec succès !";
                 header('Location: ?page=promotions&message=' . urlencode($message));
@@ -53,6 +57,7 @@ class PromotionController {
     }
 
     public function show($id) {
+        // Tous peuvent voir le détail
         try {
             $promotion = $this->promotionDAO->findById($id);
             if (!$promotion) {
@@ -70,6 +75,19 @@ class PromotionController {
     }
 
     public function edit($id) {
+        // Admin ou prof assigné à cette promotion
+        $user = AuthManager::getCurrentUser();
+        if (!AuthManager::isAdmin()) {
+            if (!AuthManager::isTeacher()) {
+                AuthManager::requireRole('admin');
+            }
+            // Vérifier si le prof est assigné à cette promotion
+            if ($user->getRole() === 'teacher' && !$user->canEditPromotion($id)) {
+                header('Location: ?page=unauthorized');
+                exit;
+            }
+        }
+        
         try {
             $promotion = $this->promotionDAO->findById($id);
             if (!$promotion) {
@@ -83,6 +101,18 @@ class PromotionController {
     }
 
     public function update($id) {
+        // Même logique que edit()
+        $user = AuthManager::getCurrentUser();
+        if (!AuthManager::isAdmin()) {
+            if (!AuthManager::isTeacher()) {
+                AuthManager::requireRole('admin');
+            }
+            if ($user->getRole() === 'teacher' && !$user->canEditPromotion($id)) {
+                header('Location: ?page=unauthorized');
+                exit;
+            }
+        }
+        
         try {
             $promotion = $this->promotionDAO->findById($id);
             if (!$promotion) {
@@ -112,6 +142,8 @@ class PromotionController {
     }
     
     public function delete($id) {
+        // Seul l'admin peut supprimer
+        AuthManager::requireRole('admin');
         try {
             $studentCount = $this->promotionDAO->countStudents($id);
             if ($studentCount > 0) {
@@ -132,34 +164,37 @@ class PromotionController {
     }
 
     public function addStudent($promotionId) {
-    try {
-        $studentId = $_POST['student_id'] ?? '';
+        // Admin et teacher peuvent ajouter des étudiants
+        AuthManager::requireRoles(['admin', 'teacher']);
         
-        if (empty($studentId)) {
-            throw new Exception("Veuillez sélectionner un étudiant");
+        try {
+            $studentId = $_POST['student_id'] ?? '';
+            
+            if (empty($studentId)) {
+                throw new Exception("Veuillez sélectionner un étudiant");
+            }
+            
+            require_once '../app/dao/StudentDAO.php';
+            $studentDAO = new StudentDAO();
+            $student = $studentDAO->findById($studentId);
+            
+            if (!$student) {
+                throw new Exception("Étudiant non trouvé");
+            }
+            
+            $student->setPromotionId($promotionId);
+            
+            if ($studentDAO->update($student)) {
+                $message = "Étudiant ajouté à la promotion avec succès !";
+                header('Location: ?page=promotions&message=' . urlencode($message));
+                exit;
+            } else {
+                throw new Exception("Erreur lors de l'ajout");
+            }
+            
+        } catch (Exception $e) {
+            $error = "Erreur : " . $e->getMessage();
+            include '../app/views/error.php';
         }
-        
-        require_once '../app/dao/StudentDAO.php';
-        $studentDAO = new StudentDAO();
-        $student = $studentDAO->findById($studentId);
-        
-        if (!$student) {
-            throw new Exception("Étudiant non trouvé");
-        }
-        
-        $student->setPromotionId($promotionId);
-        
-        if ($studentDAO->update($student)) {
-            $message = "Étudiant ajouté à la promotion avec succès !";
-            header('Location: ?page=promotions&message=' . urlencode($message));
-            exit;
-        } else {
-            throw new Exception("Erreur lors de l'ajout");
-        }
-        
-    } catch (Exception $e) {
-        $error = "Erreur : " . $e->getMessage();
-        include '../app/views/error.php';
     }
-}
 }

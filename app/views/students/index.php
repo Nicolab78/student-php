@@ -1,3 +1,7 @@
+<?php 
+require_once '../app/services/AuthManager.php';
+$user = AuthManager::getCurrentUser();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,10 +54,17 @@
                             <td><?= $student->getAge() ?></td>
                             <td><?= htmlspecialchars($student->getEmail()) ?></td>
                             <td>
+
                                 <a href="?page=student-show&id=<?= $student->getId() ?>">Voir</a>
+
+                                <?php if ($user->canAccess('student-edit')): ?>
                                 <a href="?page=student-edit&id=<?= $student->getId() ?>">Modifier</a>
+                                <?php endif; ?>
+
+                                <?php if (AuthManager::isAdmin()): ?>
                                 <a href="?page=student-delete&id=<?= $student->getId() ?>" 
                                    onclick="return confirm('Supprimer cet étudiant ?')">Supprimer</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

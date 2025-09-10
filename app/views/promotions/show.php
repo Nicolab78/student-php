@@ -67,7 +67,10 @@
                             </td>
                             <td>
                                 <a href="?page=student-show&id=<?= $student->getId() ?>">Voir</a>
+
+                                <?php if ( $user->canAccess('promotion-edit') && $user->getPromotionId() === $promotion->getId()): ?>
                                 <a href="?page=student-edit&id=<?= $student->getId() ?>">Modifier</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -75,43 +78,52 @@
             </table>
         <?php endif; ?>
 
-        <h3>Ajouter un étudiant à cette promotion</h3>
+        
+<?php if ($user->canAccess('promotion-edit')): ?>
+    <h3>Ajouter un étudiant à cette promotion</h3>
 
-<form method="POST" action="?page=promotion-add-student&id=<?= $promotion->getId() ?>">
-    <div class="form-group">
-        <label for="student_id">Choisir un étudiant :</label>
-        <select id="student_id" name="student_id" required>
-            <option value="">-- Sélectionner un étudiant --</option>
-            <?php 
-            require_once '../app/dao/StudentDAO.php';
-            $studentDAO = new StudentDAO();
-            $allStudents = $studentDAO->findAll();
-            
-            foreach ($allStudents as $student): 
+    <form method="POST" action="?page=promotion-add-student&id=<?= $promotion->getId() ?>">
+        <div class="form-group">
+            <label for="student_id">Choisir un étudiant :</label>
+            <select id="student_id" name="student_id" required>
+                <option value="">-- Sélectionner un étudiant --</option>
+                <?php 
+                require_once '../app/dao/StudentDAO.php';
+                $studentDAO = new StudentDAO();
+                $allStudents = $studentDAO->findAll();
                 
-                if ($student->getPromotionId() != $promotion->getId()):
-            ?>
-                <option value="<?= $student->getId() ?>">
-                    <?= htmlspecialchars($student->getFullName()) ?>
-                    <?php if ($student->getPromotionId()): ?>
-                        (déjà dans une autre promotion)
-                    <?php else: ?>
-                        (sans promotion)
-                    <?php endif; ?>
-                </option>
-            <?php 
-                endif;
-            endforeach; 
-            ?>
-        </select>
-    </div>
-    <button type="submit">Ajouter à la promotion</button>
-</form>
+                foreach ($allStudents as $student): 
+                    if ($student->getPromotionId() != $promotion->getId()):
+                ?>
+                    <option value="<?= $student->getId() ?>">
+                        <?= htmlspecialchars($student->getFullName()) ?>
+                        <?php if ($student->getPromotionId()): ?>
+                            (déjà dans une autre promotion)
+                        <?php else: ?>
+                            (sans promotion)
+                        <?php endif; ?>
+                    </option>
+                <?php 
+                    endif;
+                endforeach; 
+                ?>
+            </select>
+        </div>
+        <button type="submit">Ajouter à la promotion</button>
+    </form>
+<?php endif; ?>
+
         
         <div class="actions">
+
+            <?php if ($user->canAccess('promotion-edit')): ?>
             <a href="?page=promotion-edit&id=<?= $promotion->getId() ?>">Modifier cette promotion</a>
+            <?php endif; ?>
+
+            <?php if (AuthManager::isAdmin()): ?>
             <a href="?page=promotion-delete&id=<?= $promotion->getId() ?>" 
                onclick="return confirm('Supprimer cette promotion ?')">Supprimer</a>
+            <?php endif; ?>
         </div>
     </main>
     

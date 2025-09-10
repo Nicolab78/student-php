@@ -51,9 +51,16 @@
                             </td>
                             <td>
                                 <a href="?page=promotion-show&id=<?= $promotion->getId() ?>">Voir</a>
+
+                                <?php if ($user->canAccess('promotion-edit')): ?>
                                 <a href="?page=promotion-edit&id=<?= $promotion->getId() ?>">Modifier</a>
+                                <?php endif; ?>
+
+                                <?php if (AuthManager::isAdmin()): ?>
                                 <a href="?page=promotion-delete&id=<?= $promotion->getId() ?>" 
                                    onclick="return confirm('Supprimer cette promotion ?')">Supprimer</a>
+                                <?php endif; ?>
+                                
                             </td>
                         </tr>
                     <?php endforeach; ?>
