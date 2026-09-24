@@ -62,7 +62,6 @@ class StudentDAO {
         ]);
     }
 
-    // Dans StudentDAO.php
 public function update(Student $student) {
     $sql = "UPDATE students SET nom = ?, prenom = ?, age = ?, email = ?, promotion_id = ? WHERE id = ?";
     $stmt = $this->db->getPdo()->prepare($sql);

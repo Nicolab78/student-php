@@ -61,7 +61,6 @@ public function handleRegister() {
 
         AuthManager::register($username, $email, $password, $role);
 
-        // Redirection vers login après inscription
         header('Location: ?page=login');
         exit;
 

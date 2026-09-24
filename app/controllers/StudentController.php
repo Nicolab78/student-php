@@ -13,7 +13,6 @@ class StudentController {
     }
 
     public function index() {
-        // Tous peuvent voir la liste
         try {
             $students = $this->studentDAO->findAll();
             include '../app/views/students/index.php';
@@ -24,7 +23,6 @@ class StudentController {
     }
 
     public function create() {
-        // Seuls admin et teacher peuvent créer
         AuthManager::requireRoles(['admin', 'teacher']);
         include '../app/views/students/create.php';
     }
@@ -58,7 +56,6 @@ class StudentController {
     }
     
     public function show($id) {
-        // Tous peuvent voir le détail
         try {
             $student = $this->studentDAO->findById($id);
             if (!$student) {
@@ -117,7 +114,6 @@ class StudentController {
     }
 
     public function delete($id) {
-        // Seul l'admin peut supprimer
         AuthManager::requireRole('admin');
         try {
             if ($this->studentDAO->delete($id)) {

@@ -13,7 +13,6 @@ class Promotion {
         $this->description = $description;
     }
     
-    // Getters
     public function getId() {
         return $this->id;
     }
@@ -34,7 +33,6 @@ class Promotion {
         return $this->created_at;
     }
     
-    // Setters
     public function setId($id) {
         $this->id = $id;
     }
@@ -55,7 +53,6 @@ class Promotion {
         $this->created_at = $created_at;
     }
     
-    // Méthodes utiles
     public function getFullName() {
         return $this->nom . ' (' . $this->annee . ')';
     }

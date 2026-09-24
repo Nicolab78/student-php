@@ -13,7 +13,6 @@ class PromotionController {
     }
 
     public function index() {
-        // Tous peuvent voir la liste
         try {
             $promotions = $this->promotionDAO->findAll();
             include '../app/views/promotions/index.php';
@@ -24,7 +23,6 @@ class PromotionController {
     }
 
     public function create() {
-        // Seul l'admin peut créer des promotions
         AuthManager::requireRole('admin');
         include '../app/views/promotions/create.php';
     }
@@ -57,7 +55,6 @@ class PromotionController {
     }
 
     public function show($id) {
-        // Tous peuvent voir le détail
         try {
             $promotion = $this->promotionDAO->findById($id);
             if (!$promotion) {
@@ -75,13 +72,11 @@ class PromotionController {
     }
 
     public function edit($id) {
-        // Admin ou prof assigné à cette promotion
         $user = AuthManager::getCurrentUser();
         if (!AuthManager::isAdmin()) {
             if (!AuthManager::isTeacher()) {
                 AuthManager::requireRole('admin');
             }
-            // Vérifier si le prof est assigné à cette promotion
             if ($user->getRole() === 'teacher' && !$user->canEditPromotion($id)) {
                 header('Location: ?page=unauthorized');
                 exit;
@@ -101,7 +96,6 @@ class PromotionController {
     }
 
     public function update($id) {
-        // Même logique que edit()
         $user = AuthManager::getCurrentUser();
         if (!AuthManager::isAdmin()) {
             if (!AuthManager::isTeacher()) {
@@ -142,7 +136,6 @@ class PromotionController {
     }
     
     public function delete($id) {
-        // Seul l'admin peut supprimer
         AuthManager::requireRole('admin');
         try {
             $studentCount = $this->promotionDAO->countStudents($id);
@@ -164,7 +157,6 @@ class PromotionController {
     }
 
     public function addStudent($promotionId) {
-        // Admin et teacher peuvent ajouter des étudiants
         AuthManager::requireRoles(['admin', 'teacher']);
         
         try {

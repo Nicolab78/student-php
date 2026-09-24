@@ -131,7 +131,7 @@ class AuthManager {
     }
 
     public static function redirectAfterLogin() {
-        // Si il y avait une redirection prévue
+
         if (isset($_SESSION['redirect_after_login'])) {
             $redirect = $_SESSION['redirect_after_login'];
             unset($_SESSION['redirect_after_login']);

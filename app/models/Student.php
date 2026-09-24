@@ -18,7 +18,6 @@ class Student {
 
     }
     
-    // Getters
     public function getId() {
         return $this->id;
     }
@@ -39,7 +38,6 @@ class Student {
         return $this->email;
     }
     
-    // Setters
     public function setId($id) {
         $this->id = $id;
     }
