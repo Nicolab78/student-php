@@ -4,7 +4,6 @@ class Database {
     private $pdo;
     
     public function __construct() {
-        // Charger les variables d'environnement
         $this->loadEnv();
         
         try {
