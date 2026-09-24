@@ -18,8 +18,7 @@ switch ($page) {
     case 'home':
         include '../app/views/home.php';
         break;
-        
-    // Routes d'authentification
+
     case 'login':
         $controller = new AuthController();
         $controller->login();
@@ -49,8 +48,7 @@ switch ($page) {
         $controller = new AuthController();
         $controller->handleRegister();
         break;   
-        
-    // Routes étudiants
+
     case 'students':
         $controller = new StudentController();
         $controller->index();
@@ -86,7 +84,6 @@ switch ($page) {
         $controller->delete($_GET['id']);
         break;
         
-    // Routes promotions
     case 'promotions':
         $controller = new PromotionController();
         $controller->index();
